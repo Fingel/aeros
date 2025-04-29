@@ -1,0 +1,11 @@
+run: build
+	@echo "Running project..."
+	@qemu-system-x86_64 -kernel zig-out/bin/kernel.elf
+
+build:
+	@echo "Building project..."
+	@zig build
+
+test:
+	@echo "Running tests..."
+	@zig build test
