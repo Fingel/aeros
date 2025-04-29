@@ -62,5 +62,9 @@ fn kmain() callconv(.C) void {
     for (0..5) |i| {
         console.printf("{d}: Hello Zig Kernel!\n", .{i});
     }
+    for (0..90) |_| {
+        console.printf("{c}", .{'a'});
+    }
+
     while (true) {}
 }

@@ -32,9 +32,8 @@ fn vgaEntry(unsigned_char: u8, new_color: u8) u16 {
 
 pub const VgaDisplay = struct {
     column: usize = 0,
-    row: usize = VGA_HEIGHT - 1,
     color: u8 = vgaEntryColor(ConsoleColors.LightGreen, ConsoleColors.Black),
-    buffer: [*]volatile u16 = @as([*]volatile u16, @ptrFromInt(0xB8000)),
+    buffer: [*]volatile u16 = @ptrFromInt(0xB8000),
 
     pub fn initialize(self: *VgaDisplay) void {
         self.clear();
@@ -45,7 +44,7 @@ pub const VgaDisplay = struct {
     }
 
     fn putCharAt(self: *VgaDisplay, c: u8, new_color: u8) void {
-        const index = self.row * VGA_WIDTH + self.column;
+        const index = (VGA_HEIGHT - 1) * VGA_WIDTH + self.column;
         self.buffer[index] = vgaEntry(c, new_color);
     }
 
@@ -56,7 +55,6 @@ pub const VgaDisplay = struct {
             if (self.column == VGA_WIDTH) {
                 self.newLine();
             }
-            self.row = VGA_HEIGHT - 1;
             self.putCharAt(c, self.color);
             self.column += 1;
         }
