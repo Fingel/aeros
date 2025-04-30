@@ -34,4 +34,14 @@ pub fn build(b: *std.Build) void {
 
     const kernel_step = b.step("kernel", "Build the kernel");
     kernel_step.dependOn(&kernel.step);
+
+    const qemu = b.addSystemCommand(&.{
+        "qemu-system-i386",
+        "-kernel",
+        "zig-out/bin/kernel.elf",
+    });
+
+    qemu.step.dependOn(b.getInstallStep());
+    const run_step = b.step("run", "Run the kernel");
+    run_step.dependOn(&qemu.step);
 }
